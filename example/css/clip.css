@@ -1,0 +1,149 @@
+@font-face {
+  font-family:"Walt Disney Script";src:url("../res/fonts/wds052801.eot?") format("eot"),url("../res/fonts/wds052801.woff") format("woff"),url("../res/fonts/wds052801.ttf") format("truetype"),url("../res/fonts/wds052801.svg#WaltDisneyScript") format("svg");font-weight:normal;font-style:normal;}
+
+body,div{
+ padding:0px; 
+ margin:0px;
+ -webkit-user-select:none;
+ -webkit-tap-highlight-color: rgba(0,0,0,0); 
+ select:none;
+}
+ul{
+  padding:0px;
+  margin:0px;
+  list-style-type:none;
+}
+body{
+position:absolute;
+height:100%;
+width:100%;
+}
+
+.bg-menu{
+ background: url('../res/menu/menu.jpg') no-repeat;
+}
+
+.bg-test{
+ background: url('../res/menu/adventure.jpg') no-repeat;
+}
+.bg-scenario{
+ background: url('../res/ground/grass.jpg') repeat;
+}
+
+.gold-impact{
+  font-family:"impact";
+  color:#ecff18;
+  font-weight:bold;
+  text-shadow: 0px 0px 20px black;
+}
+
+div.playground{
+width:960px;
+height:640px;
+position:absolute;
+border-bottom:1px solid black;
+border-right:1px solid black;
+}
+div.env{
+  position:fixed;
+  width:900px;
+  height:600px;
+  cursor:pointer;
+  background: url('../res/ground/grass.jpg') repeat;
+  overflow:display;
+  z-index:20;
+}
+
+div.env div{
+  top:0px;
+  left:0px;
+  position:fixed;
+  overflow:show;
+}
+
+div.route{
+  position:absolute;
+  width:100px;
+  height:100px;
+}
+div.route div{
+  position:absolute;
+  width:20px;
+  height:20px;
+  border-radius:10px;
+  background-color:steelblue;
+}
+div.panel{
+  z-index:21;
+  position:absolute;
+  width:960px;
+  top:0px;
+  left:0px;
+  height:40px;
+  font-size:22px;
+  background: url('../res/button/topbg.png') 0px -70px no-repeat;
+}
+div.panel div{
+  float:right;
+  cursor:pointer;
+}
+
+div.panel div.replay{
+ height:50px;
+ width:50px;
+ background: url('../res/button/replay.png') 0px 0px no-repeat;
+ background-size: 50px 50px;
+ float:left;
+ margin:5px 40px 0px 20px;
+}
+div.panel a.menu{
+ display:block;
+}
+div.panel div.bombtouch{
+ height:130px;
+ width:140px;
+ background: url('../res/button/bomb-btn.png') 0px -30px no-repeat;
+ background-size: 166px 166px;
+}
+div.panel div.bombtouch .bomb{
+ height:40px;
+ width:10px;
+ float:right;
+ position:relative;
+ top:100px;
+ padding:0px 15px 0px 15px;
+}
+div.panel .energy,
+div.panel .quest-item,
+div.panel .menu {
+  float:left;
+  margin:10px 40px 0px 20px;
+}
+div.panel .energy {
+  width:500px;
+}
+div.panel .energy > span {
+  float:left;
+}
+div.panel .energy > div {
+  height:14px;
+  margin:6px 0px 2px 20px;
+  width:400px;
+  border:1px solid wheat;
+  background-color:#ecff18;
+  opacity:0.5;
+  float:left;
+} 
+
+div.block-normal {
+ overflow:display;
+}
+
+div.block-actor {
+ overflow:hidden;
+}
+a{
+  color:inherit;
+  border:none;
+  text-decoration:none;
+}
