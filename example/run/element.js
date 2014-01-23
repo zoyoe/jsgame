@@ -15,11 +15,13 @@ game.obstcal.TREE_IMG = "res/obstcals/tree.png";
 game.obstcal.TREECUT_IMG = "res/obstcals/treecut.png";
 game.actor.MAIN_IMG = "res/actors/main.png";
 game.actor.MONSTER_IMG = "res/actors/mob4.png";
+game.actor.DOG_IMG = "res/actors/dog.png";
 game.actor.BOMB_IMG = function(idx){
   return "res/actors/bomb/bomb" + idx + ".png";
 }
 game.actortype.GENERAL_MONSTER = 1;
 game.actortype.GENERAL_MONSTER_CONTAINER = 2;
+game.actortype.GENERAL_DOG = 3;
 
 game.path.normal = function(dec){
   var decoration = Math.floor(Math.random()*21); 
@@ -203,6 +205,21 @@ game.actor.monster = function(name,para){
   var clip = (new zoyoe.game.clip(name,ele));
   clip.para = para;
   clip.type = game.actortype.GENERAL_MONSTER;
+  game.actor.BuildMoveAction(clip);
+  return clip;
+}
+game.actor.dog = function(name,para){
+  var ele = $("<div class='block-actor'><img src='"+game.actor.DOG_IMG+"'></image></div>").get(0);
+  ele.style.width = n2px(game.BLOCK_SZ);
+  ele.style.height = n2px(game.ACTOR_HEIGHT);
+  var img = ele.getElementsByTagName("img")[0];
+  img.style.position = "relative";
+  img.style.width = "100px";
+  img.style.left = "0px";
+  img.style.top = "0px";
+  var clip = (new zoyoe.game.clip(name,ele));
+  clip.para = para;
+  clip.type = game.actortype.GENERAL_DOG;
   game.actor.BuildMoveAction(clip);
   return clip;
 }

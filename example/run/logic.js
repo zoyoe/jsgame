@@ -316,13 +316,19 @@ zoyoe.game.newName = function(){
   return name;
 }
  
-zoyoe.game.env = function(ele,fps,top,left){
+zoyoe.game.env = function(ele,fps,top,left,inst){
   var delaywindow = 1000/fps;
   var status = zoyoe.game.PAUSE;
   var topclip = new zoyoe.game.clip('root',ele,top,left);
   var topele = ele;
   var self = this;
   var timer = null;
+  var instance = inst;
+  this.onMouseClick = function(top,left){
+      if(status == zoyoe.game.RUN){
+        inst.onMouseClick(top,left);
+      };
+  }
   this.step = function(){
       if(status == zoyoe.game.RUN){
 	    topclip.step();

@@ -3,9 +3,10 @@ var scenario1 = (function createInstance(){
    var cm2 = [4,"mc2",{vt:0,vl:2}];
    var cm3 = [4,"mc3",{vt:0,vl:2}];
    var cmain = [2,"main"];
+   var dog = [5,"dog",{vt:0,vl:2}];
    var cells = 
    [
-    [1,1,  0  ,0,1,0,    0,0,1],
+    [1,1,  0  ,0,1,0,    0,dog,1],
     [0,0,  0  ,1,0,cm2,  0,0,1],
     [1,0,  1  ,0,0,1,    1,1,0],
     [0,cm1,cm3,0,1,cmain,0,0,0],
@@ -114,7 +115,7 @@ function loadScenario(){
     var sc = getUrlVars();
     singleton.inst = getScenario(sc.set,sc.idx);
     var jq_root = $('#root');
-	currentScenario = new zoyoe.game.env($('#root').get(0),30,40,0);
+	currentScenario = new zoyoe.game.env($('#root').get(0),30,40,0,singleton.inst);
     bindTargetHandler($("#root").get(0),function(e){
         var touch = e;
         if(e.type == "touchstart"){
@@ -124,7 +125,7 @@ function loadScenario(){
         e.cancelBubble = true;
         e.preventDefault();
         var p = jq_root.offset();
-        singleton.inst.onMouseClick(touch.pageY - p.top,touch.pageX - p.top);
+        currentScenario.onMouseClick(touch.pageY - p.top,touch.pageX - p.top);
     });
     $("body").get(0).ontouchmove = function(e){
       e.preventDefault();
