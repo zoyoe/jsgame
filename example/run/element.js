@@ -16,12 +16,14 @@ game.obstcal.TREECUT_IMG = "res/obstcals/treecut.png";
 game.actor.MAIN_IMG = "res/actors/main.png";
 game.actor.MONSTER_IMG = "res/actors/mob4.png";
 game.actor.DOG_IMG = "res/actors/dog.png";
+game.actor.BONE_IMG = "res/actors/bone.png";
 game.actor.BOMB_IMG = function(idx){
   return "res/actors/bomb/bomb" + idx + ".png";
 }
 game.actortype.GENERAL_MONSTER = 1;
 game.actortype.GENERAL_MONSTER_CONTAINER = 2;
 game.actortype.GENERAL_DOG = 3;
+game.actortype.GENERAL_BONE = 4;
 
 game.path.normal = function(dec){
   var decoration = Math.floor(Math.random()*21); 
@@ -29,6 +31,8 @@ game.path.normal = function(dec){
     var ele = $("<div class='block-normal'><img src='res/ground/flower1.png'></image></div>").get(0);
     ele.style.width = n2px(game.BLOCK_SZ);
     ele.style.height = n2px(game.BLOCK_SZ);
+    var img = ele.getElementsByTagName("img")[0];
+    img.style.width = n2px(game.BLOCK_SZ);
     var clip = (new zoyoe.game.clip(name,ele));
     clip.zidxLock(0);
     return clip;
@@ -36,6 +40,8 @@ game.path.normal = function(dec){
     var ele = $("<div class='block-normal'><img src='res/ground/flower2.png'></image></div>").get(0);
     ele.style.width = n2px(game.BLOCK_SZ);
     ele.style.height = n2px(game.BLOCK_SZ);
+    var img = ele.getElementsByTagName("img")[0];
+    img.style.width = n2px(game.BLOCK_SZ);
     var clip = (new zoyoe.game.clip(name,ele));
     clip.zidxLock(0);
     return clip;
@@ -43,6 +49,8 @@ game.path.normal = function(dec){
     var ele = $("<div class='block-normal'><img src='res/ground/stone.png'></image></div>").get(0);
     ele.style.width = n2px(game.BLOCK_SZ);
     ele.style.height = n2px(game.BLOCK_SZ);
+    var img = ele.getElementsByTagName("img")[0];
+    img.style.width = n2px(game.BLOCK_SZ);
     var clip = (new zoyoe.game.clip(name,ele));
     clip.zidxLock(0);
     return clip;
@@ -54,6 +62,8 @@ game.obstcal.mstc = function(name,para){
   var ele = $("<div class='block-normal'><img src='"+game.obstcal.TREECUT_IMG+"'></image></div>").get(0);
   ele.style.width = n2px(game.BLOCK_SZ);
   ele.style.height = n2px(game.BLOCK_SZ);
+  var img = ele.getElementsByTagName("img")[0];
+  img.style.width = n2px(game.BLOCK_SZ);
   var clip = (new zoyoe.game.clip(name,ele));
   clip.para = para;
   clip.type = game.actortype.GENERAL_MONSTER_CONTAINER;
@@ -64,8 +74,9 @@ game.obstcal.tree = function(){
   ele.style.width = n2px(game.BLOCK_SZ);
   ele.style.height = n2px(game.BLOCK_SZ);
   var img = ele.getElementsByTagName("img")[0];
+  img.style.width = n2px(game.BLOCK_SZ);
   img.style.position = "relative";
-  img.style.top = "-50px";
+  img.style.top = n2px(game.BLOCK_SZ - 127);
   var clip = (new zoyoe.game.clip(zoyoe.game.newName(),ele));
   return clip;
 }
@@ -108,6 +119,11 @@ game.actor.bomb = function(){
   img.style.position = "relative";
   img.style.width = "300px";
   img.style.height = "300px";
+  /* preloading the image ... */
+  for(i=0;i<5;i++){
+    preloadImage(game.actor.BOMB_IMG(i));
+  }
+  img.src = game.actor.BOMB_IMG(0);
   var clip = (new zoyoe.game.clip(zoyoe.game.newName(),ele));
   clip.stop();
   game.actor.BuildBombAction(clip);
@@ -186,7 +202,7 @@ game.actor.main = function(name){
   ele.style.height = n2px(game.ACTOR_HEIGHT);
   var img = ele.getElementsByTagName("img")[0];
   img.style.position = "relative";
-  img.style.width = "100px";
+  img.style.width = n2px(game.BLOCK_SZ);
   img.style.left = "0px";
   img.style.top = "0px";
   var clip = (new zoyoe.game.clip(name,ele));
@@ -199,7 +215,7 @@ game.actor.monster = function(name,para){
   ele.style.height = n2px(game.ACTOR_HEIGHT);
   var img = ele.getElementsByTagName("img")[0];
   img.style.position = "relative";
-  img.style.width = "100px";
+  img.style.width = n2px(game.BLOCK_SZ);
   img.style.left = "0px";
   img.style.top = "0px";
   var clip = (new zoyoe.game.clip(name,ele));
@@ -214,13 +230,28 @@ game.actor.dog = function(name,para){
   ele.style.height = n2px(game.ACTOR_HEIGHT);
   var img = ele.getElementsByTagName("img")[0];
   img.style.position = "relative";
-  img.style.width = "100px";
+  img.style.width = n2px(game.BLOCK_SZ);
   img.style.left = "0px";
   img.style.top = "0px";
   var clip = (new zoyoe.game.clip(name,ele));
   clip.para = para;
   clip.type = game.actortype.GENERAL_DOG;
   game.actor.BuildMoveAction(clip);
+  return clip;
+}
+
+game.actor.bone = function(name,para){
+  var ele = $("<div class='block-actor'><img src='"+game.actor.BONE_IMG+"'></image></div>").get(0);
+  ele.style.width = n2px(game.BLOCK_SZ);
+  ele.style.height = n2px(game.ACTOR_HEIGHT);
+  var img = ele.getElementsByTagName("img")[0];
+  img.style.position = "relative";
+  img.style.width = n2px(game.BLOCK_SZ);
+  img.style.left = "0px";
+  img.style.top = "0px";
+  var clip = (new zoyoe.game.clip(name,ele));
+  clip.para = para;
+  clip.type = game.actortype.GENERAL_BONE;
   return clip;
 }
 

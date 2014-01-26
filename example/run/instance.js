@@ -4,7 +4,8 @@ game.sign = function(n){
   else{return 0;}
 }
 
-zoyoe.game.cubic_size = 100;
+var cbsz = game.BLOCK_SZ;
+var cbszhalf = cbsz/2;
 
 zoyoe.game.instance = function(cells,path){
    var instance = this;
@@ -12,6 +13,7 @@ zoyoe.game.instance = function(cells,path){
    this.cells = cells;
    this.path = path;
    var ns = neighbours(this.cells);
+   var monsterkilled = 0;
    this.getZIndex = function(ps){
      return ps.x * this.cells.length + ps.y;
    }
@@ -23,23 +25,24 @@ zoyoe.game.instance = function(cells,path){
      }
      return true;
    }; 
- 
+
    this.cell2pixel = function(x,y){
-     return {top:x*100,left:y*100};
+     return {top:x*cbsz,left:y*cbsz};
    };
    this.pixel2cell = function(top,left){
-     return {x:Math.floor(top/100),y:Math.floor(left/100)}
+     return {x:Math.floor(top/cbsz),y:Math.floor(left/cbsz)}
    };
    this.pixel2cells = function(top,left){
-     return [{x:Math.floor(top/100),y:Math.floor(left/100)},
-             {x:Math.floor(top/100),y:Math.floor((left + 99)/100)},
-             {x:Math.floor((top + 99)/100),y:Math.floor(left/100)},
-             {x:Math.floor((top+99)/100),y:Math.floor((left+99)/100)}]
+     return [{x:Math.floor(top/cbsz),y:Math.floor(left/cbsz)},
+             {x:Math.floor(top/cbsz),y:Math.floor((left + cbsz - 1)/cbsz)},
+             {x:Math.floor((top + cbsz-1)/cbsz),y:Math.floor(left/cbsz)},
+             {x:Math.floor((top + cbsz - 1)/cbsz),y:Math.floor((left+cbsz-1)/cbsz)}]
    };
    this.pixel2targets = function(top,left,vtop,vleft){
      var vt = game.sign(vtop); 
      var vl = game.sign(vleft); 
-     return [{x:Math.floor((top+50+50*vt)/100),y:Math.floor((left+50+50*vl)/100)}]
+     return [{x:Math.floor((top+(cbszhalf)+(cbszhalf)*vt)/cbsz),
+              y:Math.floor((left+cbszhalf+cbszhalf*vl)/cbsz)}]
    };
    this.pathExtractor = function(x,y){
      var cells = this.path;
@@ -94,6 +97,10 @@ zoyoe.game.instance = function(cells,path){
        var dog = new game.actor.dog(info[1],info[2]);
        this.actors[info[1]] = dog;
        return dog;
+    case 6: /* this is the bone */ 
+       var bone = new game.actor.bone(info[1],info[2]);
+       this.actors[info[1]] = bone;
+       return bone;
     }
 
   }
@@ -120,8 +127,8 @@ zoyoe.game.instance = function(cells,path){
           var tracks = frame.getClips();
           var srcidx = self.cells[0].length * actcell.x + actcell.y;
           for( t in tracks){
-            var cell = self.pixel2cell(tracks[t].top + zoyoe.game.cubic_size/2,tracks[t].left 
-              + zoyoe.game.cubic_size/2);
+            var cell = self.pixel2cell(tracks[t].top + cbsz/2,tracks[t].left 
+              + cbsz/2);
             var cellidx = self.cells[0].length * cell.x + cell.y;
             if(ns(srcidx,cellidx)){
               if(tracks[t].bomb!=undefined){
@@ -155,7 +162,7 @@ zoyoe.game.instance = function(cells,path){
       var r = Math.floor(path[i]/this.cells[0].length);
       var l = path[i] % this.cells[0].length;
       var block = $("<div class='route'><div></div></div>");
-      block.css({"top":n2px(r*100),"left":n2px(l*100)});
+      block.css({"top":n2px(r*cbsz),"left":n2px(l*cbsz)});
       //$("#root").append(block);
       var x = Math.floor(path[i]/this.cells[0].length);
       var y = path[i] % this.cells[0].length;
@@ -191,12 +198,21 @@ zoyoe.game.instance = function(cells,path){
     dialogAlert("You have used all your energe. Now you are too tired to move !",
         function(){resetScenario();});
   }
+
+  this.success = function(){
+    dialogAlert("Congratuations, you have completed this !!! Press Ok to continue"
+      + "<p>monster killed: " + monsterkilled+ " </p>",
+    function(){
+      window.location.href = "./adventure.html";
+     });
+  }
   this.initStage = function(p){
     parent = p;
     var frame = parent.getFrame(0);
     var self = this;
     var maintrack = frame.getTrack(this.actors['main'].name());
     var stop_if_no_targets = true;
+    var hasbone = false;
     maintrack.action = function(){
       if(this.clip.targets.length == 0){
          /* Nothing to Do */
@@ -267,8 +283,24 @@ zoyoe.game.instance = function(cells,path){
       dialogAlert("Yum Yum. You got killed !!! Press Ok to restart",
         function(){resetScenario();});
     }
-
-
+    maintrack.caughtByDog = function(){
+      pauseScenario();
+      if(hasbone){
+        self.success();
+      }else{
+        dialogAlert("If you bring me my bone, I will lead you out of here !!! Press Ok to continue",
+        function(){continueScenario();});
+      }
+    }
+    maintrack.pickBone = function(){
+      pauseScenario();
+      dialogAlert("You have picked the bone for the dog !!! Press Ok to continue",
+        function(){
+          hasbone = true;
+          continueScenario();
+        }
+      );
+    }
     function move(clip){
       if(clip.targets[0].vtop > 0){
         clip.towardsBottom();
@@ -300,17 +332,22 @@ zoyoe.game.instance = function(cells,path){
           }
 
           var fame = parent.getFrame(0);
-          var actcell = self.pixel2cell(this.top,this.left);
+          var actcell = self.pixel2cell(this.top + cbsz/2,this.left 
+              + cbsz/2);
 
           /* we are goint to get the frame that tracks this clip */
  
           var tracks = frame.getClips();
           for( t in tracks){
             if (tracks[t].caughtByMonster){
-              var cell = self.pixel2cell(tracks[t].top + zoyoe.game.cubic_size/2,tracks[t].left 
-                + zoyoe.game.cubic_size/2);
+              var cell = self.pixel2cell(tracks[t].top + cbsz/2,tracks[t].left 
+                + cbsz/2);
               if(cell.x == actcell.x && cell.y == actcell.y){
-                tracks[t].caughtByMonster();
+                var distance = Math.max(Math.abs(tracks[t].top - this.top),
+                                      Math.abs(tracks[t].left-this.left));
+                if(distance < cbsz/2){
+                  tracks[t].caughtByMonster();
+                }
               }
             }
           }
@@ -318,6 +355,7 @@ zoyoe.game.instance = function(cells,path){
         }
       }
       mtrack.bomb = function(){
+        monsterkilled += 1;
         active = false;
         mtrack.clip.bomb(function(){
           frame.untrackClip(mtrack);
@@ -326,11 +364,35 @@ zoyoe.game.instance = function(cells,path){
       }
     }
 
+    function initBone(mtrack,v){
+      /* the following is an indicator of whether the monster is still alive */
+      mtrack.action = function(){
+        var fame = parent.getFrame(0);
+        var actcell = self.pixel2cell(this.top,this.left);
+
+        /* we are goint to get the frame that tracks this clip */
+
+        var tracks = frame.getClips();
+        for( t in tracks){
+          if (tracks[t].pickBone){
+            var distance = Math.max(Math.abs(tracks[t].top - this.top),
+                                    Math.abs(tracks[t].left-this.left));
+            if(distance == 0){
+               tracks[t].pickBone();
+               frame.untrackClip(mtrack);
+            }
+          }
+        }
+      }
+    }
+
+
     function initDog(mtrack,v){
       mtrack.clip.targets = [{vtop:v.vt,vleft:v.vl}];
       move(mtrack.clip);
       /* the following is an indicator of whether the monster is still alive */
       var active = true;
+      var attempt = 0;
       mtrack.action = function(){
         if(active){
           var top = this.top + this.clip.targets[0].vtop;
@@ -353,10 +415,15 @@ zoyoe.game.instance = function(cells,path){
           var tracks = frame.getClips();
           for( t in tracks){
             if (tracks[t].caughtByDog){
-              var cell = self.pixel2cell(tracks[t].top + zoyoe.game.cubic_size/2,tracks[t].left 
-                + zoyoe.game.cubic_size/2);
-              if(cell.x == actcell.x && cell.y == actcell.y){
-                tracks[t].caughtByDog();
+              var distance = Math.max(Math.abs(tracks[t].top - this.top),
+                                      Math.abs(tracks[t].left-this.left));
+              if(distance < 10){
+                if (attempt == 0){
+                  attempt = 10;
+                  tracks[t].caughtByDog();
+                }else{
+                  attempt -= 1;
+                }
               }
             }
           }
@@ -402,6 +469,9 @@ zoyoe.game.instance = function(cells,path){
       }else if(this.actors[n].type == game.actortype.GENERAL_DOG){
          var mtrack = frame.getTrack(this.actors[n].name()); 
          initDog(mtrack,this.actors[n].para);
+      }else if(this.actors[n].type == game.actortype.GENERAL_BONE){
+         var mtrack = frame.getTrack(this.actors[n].name()); 
+         initBone(mtrack,this.actors[n].para);
       }else if(this.actors[n].type == game.actortype.GENERAL_MONSTER_CONTAINER){
          initMContainer(this.actors[n].name(),zoyoe.game.newName(),this.actors[n].para);
       }

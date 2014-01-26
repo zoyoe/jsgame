@@ -1,0 +1,67 @@
+body{
+  padding:0px;
+  margin:0px;
+}
+div{
+  padding:0px;
+  margin:0px;
+}
+
+.nav .button{
+  float:right;
+  margin:0px 10px 0px 10px;
+  cursor:pointer;
+}
+
+.palette-bright{
+  background-color: #ffffff;
+}
+.palette-dark{
+  background-color: #2c343b;
+}
+.pallet-shadow{
+  background-color: #52616d;
+}
+.pallet-gray{
+  background-color: #eae1d1;
+}
+.pallet-focus{
+  background-color: #c44741;
+}
+
+div.page{
+  width:960px;
+  margin:auto;
+}
+div.nav{
+  background-color:#52616d;
+  color:#eae1d1;
+  padding:10px;
+  border-bottom:1px solid #eae1d1;
+}
+
+div.foot{
+  background-color:#2c343b;
+  color:#eae1d1;
+  padding:10px;
+  border-top: 1px solid #eae1d1;
+  padding:50px 50px 10px 50px;
+}
+
+.gamewindow{
+  width:960px;
+  height:635px;
+  overflow:hidden;
+}
+
+.focus{
+  font-size:24px;
+  color:#c44741;
+  font-weight:bold;
+}
+
+iframe{
+  border:0px;
+  padding:0px;
+  margin:0px;
+}

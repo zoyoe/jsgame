@@ -13,6 +13,9 @@ zoyoe.game.RUN = 0;
 function n2px(n){
   return n+"px";
 }
+function px2n(px){
+  parseInt(px);
+}
 
 zoyoe.game.noopFrame = function(parent,idx){
 	var index = idx;

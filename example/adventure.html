@@ -20,14 +20,23 @@
     position:absolute;
     left:723px;
     width:300px;
+    padding-left:10px;
     top:30px;
   }
   div.adventure-square{
     width:96px;
     height:96px;
     float:left;
-    margin:10px;
+    margin:0px 3px 11px 3px;
     background-image:url("res/menu/numbers/taskbtn.png");
+    cursor:pointer;
+  }
+  div.adventure-square a{
+    float:left;
+    font-size:30px;
+    font-weight:bold;
+    color:#c44741;
+    padding:13px 0 0 28px;
   }
 </style>
 
@@ -36,12 +45,13 @@
 <body>
 <div class='playground bg-test'>
 <div class='adventure-list'>
-<div class='adventure-square' onclick="zoyoe.game.switchScenario('basic',0)"><a class='n1 number'><a></div>
-<div class='adventure-square' onclick="zoyoe.game.switchScenario('basic',1)"><a class='n2 number'><a></div>
-<div class='adventure-square' onclick="zoyoe.game.switchScenario('basic',2)"><a class='n3 number'><a></div>
-<div class='adventure-square' onclick="zoyoe.game.switchScenario('basic',3)"><a class='n4 number'><a></div>
-<div class='adventure-square' onclick="zoyoe.game.switchScenario('basic',4)"><a class='n5 number'><a></div>
-<div class='adventure-square' onclick="zoyoe.game.switchScenario('basic',5)"><a class='n6 number'><a></div>
+<div class='adventure-square' onclick="zoyoe.game.switchScenario('basic',0)">
+  <a class='n1 number'>1</a>
+  <img class='lock' src="res/menu/numbers/maplock.png">
+  </img>
+</div>
+</div>
+</div>
 </div>
 </div>
 </body>
