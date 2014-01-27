@@ -1,3 +1,5 @@
+/* The glue file to configure different instances */
+
 var scenario1 = (function createInstance(){
    var cm1 = [3,"m1",{vt:2,vl:0}];
    var cm2 = [4,"mc2",{vt:0,vl:2}];
@@ -23,10 +25,36 @@ var scenario1 = (function createInstance(){
     [0,0,1,0,0,0,0,1,1],
     [1,1,0,0,0,0,0,0,1],
    ];
-   return (new zoyoe.game.instance(cells,path));
+   return (new escape.game.instance(cells,path));
 })();
 
-var scenarios = {basic:[scenario1]}
+var scenario2 = (function createInstance(){
+   var cm1 = [3,"m1",{vt:2,vl:0}];
+   var cm2 = [4,"mc2",{vt:0,vl:2}];
+   var cm3 = [4,"mc3",{vt:0,vl:2}];
+   var cmain = [2,"main"];
+   var cells = 
+   [
+    [1,1,  0  ,0,1,0,    0,0,1],
+    [0,0,  0  ,1,0,cm2,  0,0,1],
+    [1,0,  1  ,0,0,1,    1,1,0],
+    [0,cm1,cm3,0,1,cmain,0,0,0],
+    [0,0,  1,  0,0,0,    0,1,1],
+    [1,1,  0,  0,0,0,    0,0,1],
+   ]
+   var path = 
+   [
+    [1,1,0,0,1,0,0,0,1],
+    [0,0,0,1,0,1,0,0,1],
+    [1,0,1,0,0,1,1,1,0],
+    [0,0,1,0,1,0,0,0,0],
+    [0,0,1,0,0,0,0,1,1],
+    [1,1,0,0,0,0,0,0,1],
+   ];
+   return (new escape.game.instance(cells,path));
+})();
+
+var scenarios = {basic:[scenario1,scenario2]}
 
 function getScenario(set,idx){
   return scenarios[set][idx]
@@ -89,13 +117,6 @@ function continueScenario(){
   currentScenario.run();
 }
 
-function preloadImage(img){
-  $("<img>").attr({
-      src: img
-  }).appendTo("#preload").css({ display: "none" });
-}
-
-
 function loadScenario(){
     var singleton = {};
     var sc = getUrlVars();
@@ -121,23 +142,10 @@ function loadScenario(){
     });
     $("#panel .replay").click(function(e){
       resetScenario();
-      /* There seems to be a bug there, can not easily target it 
-      currentScenario.reset();
-      singleton.inst = getScenario(sc.set,sc.idx);
-      var root = currentScenario.root();
-      var clip = new zoyoe.game.clip('move',$("<div></div>").get(0));
-      var map = new game.map(singleton.inst ,clip);
-      map.generate();
-      root.insertClip(clip);
-      root.trackClip(root.getFrame(0),clip);
-      buildInfo(singleton.inst);
-      currentScenario.run();
-      */
     });
     var root = currentScenario.root();
     var clip = new zoyoe.game.clip('move',$("<div></div>").get(0));
-    var map = new game.map(singleton.inst ,clip);
-    map.generate();
+    singleton.inst.initialize(clip);
     root.insertClip(clip);
     root.trackClip(root.getFrame(0),clip);
     buildInfo(singleton.inst);

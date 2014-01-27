@@ -1,13 +1,23 @@
-game.sign = function(n){
+/* To finally construct an example, we need 3 layers,
+
+  1. bottom layer which is logic.js
+
+  2. element layer which is element.js
+
+  3. instance layer which is this file. It defines the game logic and actions for cliptracks in key frames.
+
+*/
+
+escape.game.sign = function(n){
   if (n >0){return 1;}
   else if (n < 0){return -1;}
   else{return 0;}
 }
 
-var cbsz = game.BLOCK_SZ;
+var cbsz = escape.game.BLOCK_SZ;
 var cbszhalf = cbsz/2;
 
-zoyoe.game.instance = function(cells,path){
+escape.game.instance = function(cells,path){
    var instance = this;
    var parent = null;
    this.cells = cells;
@@ -39,8 +49,8 @@ zoyoe.game.instance = function(cells,path){
              {x:Math.floor((top + cbsz - 1)/cbsz),y:Math.floor((left+cbsz-1)/cbsz)}]
    };
    this.pixel2targets = function(top,left,vtop,vleft){
-     var vt = game.sign(vtop); 
-     var vl = game.sign(vleft); 
+     var vt = escape.game.sign(vtop); 
+     var vl = escape.game.sign(vleft); 
      return [{x:Math.floor((top+(cbszhalf)+(cbszhalf)*vt)/cbsz),
               y:Math.floor((left+cbszhalf+cbszhalf*vl)/cbsz)}]
    };
@@ -206,6 +216,26 @@ zoyoe.game.instance = function(cells,path){
       window.location.href = "./adventure.html";
      });
   }
+
+
+  /* this is the entry function that prepares all required clips in zoyoe.game.env */
+  this.initialize = function(clip){
+    var cells = this.cells;
+    for(var r=0;r<cells.length;r++){
+      for (var l=0;l<cells[r].length;l++){
+        var cell = this.itemInit(cells[r][l]);
+        if(cell){
+          clip.insertClip(cell);
+          var pos = this.cell2pixel(r,l);
+          var p = cell.position(pos.top,pos.left);
+          var frame = clip.getFrame(0);
+          var cliptrack = clip.trackClip(frame,cell);
+          cell.zidx(r * cells.length + l);
+        }
+      }
+    }
+    this.initStage(clip);
+  }
   this.initStage = function(p){
     parent = p;
     var frame = parent.getFrame(0);
@@ -332,8 +362,7 @@ zoyoe.game.instance = function(cells,path){
           }
 
           var fame = parent.getFrame(0);
-          var actcell = self.pixel2cell(this.top + cbsz/2,this.left 
-              + cbsz/2);
+          var actcell = self.pixel2cell(this.top,this.left);
 
           /* we are goint to get the frame that tracks this clip */
  
@@ -343,11 +372,7 @@ zoyoe.game.instance = function(cells,path){
               var cell = self.pixel2cell(tracks[t].top + cbsz/2,tracks[t].left 
                 + cbsz/2);
               if(cell.x == actcell.x && cell.y == actcell.y){
-                var distance = Math.max(Math.abs(tracks[t].top - this.top),
-                                      Math.abs(tracks[t].left-this.left));
-                if(distance < cbsz/2){
-                  tracks[t].caughtByMonster();
-                }
+                tracks[t].caughtByMonster();
               }
             }
           }

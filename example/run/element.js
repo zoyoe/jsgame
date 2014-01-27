@@ -1,3 +1,4 @@
+var escape = {}
 var game = {}
 game.VOID = 0;
 game.PATH = 1;
@@ -119,11 +120,6 @@ game.actor.bomb = function(){
   img.style.position = "relative";
   img.style.width = "300px";
   img.style.height = "300px";
-  /* preloading the image ... */
-  for(i=0;i<5;i++){
-    preloadImage(game.actor.BOMB_IMG(i));
-  }
-  img.src = game.actor.BOMB_IMG(0);
   var clip = (new zoyoe.game.clip(zoyoe.game.newName(),ele));
   clip.stop();
   game.actor.BuildBombAction(clip);
@@ -255,25 +251,6 @@ game.actor.bone = function(name,para){
   return clip;
 }
 
-game.map = function(inst,clip){
-  this.generate = function(){
-    var cells = this.instance.cells;
-    for(var r=0;r<cells.length;r++){
-      for (var l=0;l<cells[r].length;l++){
-        var cell = inst.itemInit(cells[r][l]);
-        if(cell){
-          clip.insertClip(cell);
-          var pos = this.instance.cell2pixel(r,l);
-          var p = cell.position(pos.top,pos.left);
-          var frame = clip.getFrame(0);
-          var cliptrack = clip.trackClip(frame,cell);
-          cell.zidx(r * cells.length + l);
-        }
-      }
-    }
-    inst.initStage(this.clip);
-  };
-  this.instance = inst;
-  this.clip = clip;
-}
 
+
+escape.game = game;

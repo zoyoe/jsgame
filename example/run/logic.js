@@ -1,3 +1,21 @@
+/* A resuable frame based logic kernel that controls how we rendering all the objects */
+
+/** The data structure is simple :
+
+   Clip
+   => [*][][][][*]    <=============     list of Frames while [] are noopFarmes and [*] are key frames
+
+   frame
+   => <clip1><clip2><clip3>   <=====     list of ClipProx. We use notation <> to specifiy a clipProx. For example <clipA> means a prox of clipA 
+
+   Frame rate is usually 20 frames per second.
+
+   The idea is simple if you are familiar Adobe flash. 
+
+*/
+
+
+
 var zoyoe = document.zoyoe;
 if(zoyoe == undefined){
   zoyoe = {};
@@ -300,6 +318,7 @@ zoyoe.game.clip = function (n,ele,top,left){
     return relative_left;
   }
 }
+
 zoyoe.game.clipprox = function(clip){
 	this.clip = clip;
 	this.top = clip.top();
