@@ -17,11 +17,15 @@ function inspectClip(div,clip){
     var basic_info = $("<div></div>").addClass("inspect-basic-info");
     var frames_line = $("<div></div>").addClass("inspect-frames-line");
     var action_txt = $("<div></div>").addClass("inspect-frames-line");
+    var track_txt = $("<div></div>").addClass("inspect-frames-line");
+    var clip_render = $("<div></div>").addClass("inspect-frames-line");
     var object_list = $("<ul><div class='title'>tracked clips</div></ul>").addClass("inspect-frame-objects");
     container.append(basic_info);
+    container.append(object_list);
     container.append(frames_line);
     container.append(action_txt);
-    container.append(object_list);
+    container.append(track_txt);
+    container.append(clip_render);
     var curfocus;
     var clo = new Array();
     for (var i = 0;i<clip.length();i++){
@@ -38,12 +42,17 @@ function inspectClip(div,clip){
        clo[i] = new function(){
           this.ele = frame_btn;
           this.frame = frame;
+          this.idx = i;
           var self = this;
           this.cb = function(){
             inspectFrame(container,object_list,action_txt,self.frame);
             curfocus.removeClass('inspect-frame-focus');
             self.ele.addClass('inspect-frame-focus');
             curfocus = self.ele;
+            clip.gotoAndStop(self.idx);
+            clip.step();
+            clip_render.empty();
+            clip_render.append(clip.element());
           }
        }
        frame_btn.on('click',clo[i].cb);
@@ -60,6 +69,8 @@ function inspectClip(div,clip){
 
     /* all clips must have at least 1 frame */
     prepareBasicInfo(basic_info,clip)
+
+    return track_txt;
 }
 
 function prepareBasicInfo (basic_info,clip){
@@ -71,20 +82,24 @@ function inspectFrame(container,object_list,action_txt,frame){
    var tracks = frame.getClips();
    var clo = {};
    for (t in tracks){
-     var clip = tracks[t];
-     var libtn = $("<li>" + clip.clip.name() + "</li>");
+     var track = tracks[t];
+     var libtn = $("<li>" + track.clip.name() + "</li>");
      object_list.append(libtn);
      /* No fun and luck here, this function might be buggy */
      clo[t] = new function(){
-          this.clip = clip.clip;
+          this.track = track;
           var self = this;
           this.cb = function(){
-            inspectClip(container,self.clip);
+            inspectTrack(container,self.track);
           }
        }
      libtn.on('click',clo[t].cb);
    }
    action_txt.html(frame.action.toString());
+}
+
+function inspectTrack(container,track){
+  inspectClip(container,track.clip).html(track.action.toString());
 }
 
 

@@ -8,16 +8,16 @@
 
 */
 
-escape.game.sign = function(n){
+labescape.game.sign = function(n){
   if (n >0){return 1;}
   else if (n < 0){return -1;}
   else{return 0;}
 }
 
-var cbsz = escape.game.BLOCK_SZ;
+var cbsz = labescape.game.BLOCK_SZ;
 var cbszhalf = cbsz/2;
 
-escape.game.instance = function(cells,path){
+labescape.game.instance = function(cells,path){
    var instance = this;
    var parent = null;
    this.cells = cells;
@@ -49,8 +49,8 @@ escape.game.instance = function(cells,path){
              {x:Math.floor((top + cbsz - 1)/cbsz),y:Math.floor((left+cbsz-1)/cbsz)}]
    };
    this.pixel2targets = function(top,left,vtop,vleft){
-     var vt = escape.game.sign(vtop); 
-     var vl = escape.game.sign(vleft); 
+     var vt = labescape.game.sign(vtop); 
+     var vl = labescape.game.sign(vleft); 
      return [{x:Math.floor((top+(cbszhalf)+(cbszhalf)*vt)/cbsz),
               y:Math.floor((left+cbszhalf+cbszhalf*vl)/cbsz)}]
    };

@@ -25,7 +25,7 @@ var scenario1 = (function createInstance(){
     [0,0,1,0,0,0,0,1,1],
     [1,1,0,0,0,0,0,0,1],
    ];
-   return (new escape.game.instance(cells,path));
+   return (new labescape.game.instance(cells,path));
 })();
 
 var scenario2 = (function createInstance(){
@@ -51,7 +51,7 @@ var scenario2 = (function createInstance(){
     [0,0,1,0,0,0,0,1,1],
     [1,1,0,0,0,0,0,0,1],
    ];
-   return (new escape.game.instance(cells,path));
+   return (new labescape.game.instance(cells,path));
 })();
 
 var scenarios = {basic:[scenario1,scenario2]}

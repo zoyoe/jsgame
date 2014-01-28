@@ -278,9 +278,9 @@ zoyoe.game.clip = function (n,ele,top,left){
     status = zoyoe.game.PAUSE;
   };
   this.gotoAndStop = function(frame_number){
-    return;
     idx = frame_number;
     status = zoyoe.game.PAUSE;
+    return;
   };
   this.gotoAndPlay = function(frame_number){
     idx = frame_number;

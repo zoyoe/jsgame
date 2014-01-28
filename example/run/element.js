@@ -1,4 +1,4 @@
-var escape = {}
+var labescape = {}
 var game = {}
 game.VOID = 0;
 game.PATH = 1;
@@ -251,6 +251,4 @@ game.actor.bone = function(name,para){
   return clip;
 }
 
-
-
-escape.game = game;
+labescape.game = game;
