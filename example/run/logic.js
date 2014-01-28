@@ -77,7 +77,7 @@ zoyoe.game.noopFrame = function(parent,idx){
         return iskeyframe;
     };
     this.setKeyframe = function(b){
-        isKeyframe = b;
+        iskeyframe = b;
     };
     this.clips = function(){
         return clips;
