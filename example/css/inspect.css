@@ -1,0 +1,41 @@
+#inspect{
+  padding:10px;
+  border:1px solid gray;
+}
+
+div.inspect-basic-info{
+  border-bottom: 1px solid #eeeeee;
+}
+
+div.inspect-frames-line{
+  padding:5px 0 10px 0;
+}
+
+ul.inspect-frame-objects{
+  clear:both;
+  border: 1px solid #eeeeee;
+  min-height:100px;
+  margin:10px 0 10px 0;
+  float:left;
+  width:200px;
+}
+
+div.inspect-frame-basic{
+  border-bottom: 1px solid #eeeeee;
+}
+
+div.inspect-frame-basic{
+  float:left;
+  width:5px;
+  height:20px;
+  border:1px solid #dddddd;
+}
+
+div.inspect-frame-key{
+  background-color:black;
+}
+
+#inspect div.foot{
+  border-top: 1px solid #eeeeee;
+  clear:both;
+}

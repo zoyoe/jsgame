@@ -36,10 +36,10 @@ function px2n(px){
 }
 
 zoyoe.game.noopFrame = function(parent,idx){
-	var index = idx;
-	var clip = parent;
-	var iskeyframe = false;
-	var clips = {};
+    var index = idx;
+    var clip = parent;
+    var iskeyframe = false;
+    var clips = {};
     var status = zoyoe.game.RUN;
     this.tracked = function(c){
       if(clips[c.name()]){
@@ -51,21 +51,21 @@ zoyoe.game.noopFrame = function(parent,idx){
     this.getTrack = function(name){
       return clips[name];
     }
-	this.getIndex = function(){
-		return index;
-	};
-	this.getClips = function(){
-		return clips;
-	};
-	this.trackClip = function(clip){
+    this.getIndex = function(){
+        return index;
+    };
+    this.getClips = function(){
+        return clips;
+    };
+    this.trackClip = function(clip){
         if(clips[clip.name()]!=undefined){
           return clips[clip.name()];
         }else{
-		  clips[clip.name()] = new zoyoe.game.clipprox(clip);
-		  iskeyframe = true;
+          clips[clip.name()] = new zoyoe.game.clipprox(clip);
+          iskeyframe = true;
           return clips[clip.name()];
         }
-	};
+    };
     this.untrackClip = function(clip){
        if(clips[clip.clip.name()] == clip){
           delete clips[clip.clip.name()];
@@ -73,9 +73,9 @@ zoyoe.game.noopFrame = function(parent,idx){
           throw "Clip Not Found"
        }
     }
-	this.keyframe = function (){
-		return iskeyframe;
-	};
+    this.keyframe = function (){
+        return iskeyframe;
+    };
     this.setKeyframe = function(b){
         isKeyframe = b;
     };
@@ -85,21 +85,21 @@ zoyoe.game.noopFrame = function(parent,idx){
     this.action = function(cb){
         return;
     }
-	this.render = function(){
-		if(iskeyframe){
-		  for(c in clips){
+    this.render = function(){
+        if(iskeyframe){
+          for(c in clips){
              var track = clips[c];
              track.clip.position(clips[c].top,clips[c].left);
              /* Since action might delete him self, so should preform action last */
              track.action();
           }
-		}else{
-          var pk = clip.getPreKey(index);
-          var nk = clip.getNextKey(index);
-          if(pk && nk){
-			var pcs = pk.clips();
-			var ncs = nk.clips();
-			for (var key in pcs){
+        }else{
+        var pk = clip.getPreKey(index);
+        var nk = clip.getNextKey(index);
+        if(pk && nk){
+            var pcs = pk.clips();
+            var ncs = nk.clips();
+            for (var key in pcs){
               var pc = pcs[key];
               var nc = ncs[key];
               if(nc){
@@ -109,14 +109,14 @@ zoyoe.game.noopFrame = function(parent,idx){
                   var top = pc.top*(1-lambda) + nc.top*lambda;
                   var left = pc.left*(1-lambda) + nc.left*lambda;
                   pc.clip.position(top,left);
-				break;
-				}
-			  }
-		    }
-	      }
+                break;
+                }
+              }
+            }
+          }
         }
-	/* It is not implemented well */
-	};
+    /* It is not implemented well */
+    };
 };
 zoyoe.game.clip = function (n,ele,top,left){
 
@@ -176,7 +176,7 @@ zoyoe.game.clip = function (n,ele,top,left){
     status = zoyoe.game.RUN;
   }
   this.clips = function(){
-	  return clips;
+      return clips;
   };
   this.element = function(){
     return element;
@@ -184,31 +184,31 @@ zoyoe.game.clip = function (n,ele,top,left){
 
   /* return the previous key frame */
   this.getPreKey = function(idx){
-	  for(var i = idx;0<=i;i--){
-		  if(frames[i].keyframe()){
-			  return frames[i];
-		  }
-	  };
-	  return null;
+      for(var i = idx;0<=i;i--){
+          if(frames[i].keyframe()){
+              return frames[i];
+          }
+      };
+      return null;
   };
 
   /* return the next key frame */
   this.getNextKey = function(idx){
-	  for(var i = idx+1;i<frames.length;i++){
-		  if(frames[i].keyframe()){
-			  return frames[i];
-		  }
-	  };
-	  return null;
+      for(var i = idx+1;i<frames.length;i++){
+          if(frames[i].keyframe()){
+              return frames[i];
+          }
+      };
+      return null;
   };
 
   /* return the top-left position of this clip */
   this.position = function(top,left){
-	  if((!isNaN(top))&&(!isNaN(left))){
-		  relative_top = top;
-		  relative_left = left;
-	  }
-	  return {top:relative_top,left:relative_left};
+      if((!isNaN(top))&&(!isNaN(left))){
+          relative_top = top;
+          relative_left = left;
+      }
+      return {top:relative_top,left:relative_left};
   };
   this.render = function(){
     var top = 0;
@@ -229,27 +229,27 @@ zoyoe.game.clip = function (n,ele,top,left){
         stay = false;
         return;
       }
-	  idx = idx+1;
-	  if(idx == frames.length){
-		  idx = 0;
-	  }
+      idx = idx+1;
+      if(idx == frames.length){
+          idx = 0;
+      }
   };
   this.setCallBack = function(frame_idx,callback){
-	  if(frame_idx<frames.length){
-		  throw "frame idx overflow";
-	  }else{
-		  this.frames[frame_idx.callbac = callback];
-	  }
+      if(frame_idx<frames.length){
+          throw "frame idx overflow";
+      }else{
+          this.frames[frame_idx.callbac = callback];
+      }
   };
   this.step = function(){
     var display = element.style.display;
     element.style.display = "none";
-	var frame = frames[idx];
-	frame.render(this);
+    var frame = frames[idx];
+    frame.render(this);
     var keyframe = this.getPreKey(idx);
     for(var c in clips){
       if(keyframe.tracked(clips[c])){
-	 clips[c].step();
+     clips[c].step();
         if(clips[c].element().parentNode == element){
           /* don know what to do here */
         }else{
@@ -289,7 +289,7 @@ zoyoe.game.clip = function (n,ele,top,left){
     /* not implemented */
   };
   this.insertClip = function(clip){
-	  this.clips().push(clip);
+      this.clips().push(clip);
       clip.setParent(this);
   };
   this.name = function(){
@@ -320,10 +320,10 @@ zoyoe.game.clip = function (n,ele,top,left){
 }
 
 zoyoe.game.clipprox = function(clip){
-	this.clip = clip;
-	this.top = clip.top();
-	this.left = clip.left();
-	this.motion = zoyoe.game.MOTION.NULL;
+    this.clip = clip;
+    this.top = clip.top();
+    this.left = clip.left();
+    this.motion = zoyoe.game.MOTION.NULL;
     this.action = function(){
       return;
     }
@@ -353,7 +353,7 @@ zoyoe.game.env = function(ele,fps,top,left,inst){
   }
   this.step = function(){
       if(status == zoyoe.game.RUN){
-	    topclip.step();
+        topclip.step();
       }
   };
   this.root = function(){
@@ -375,7 +375,7 @@ zoyoe.game.env = function(ele,fps,top,left,inst){
           self.run();
       }else{
           return;
-      }		
-    },delaywindow);	
+      }        
+    },delaywindow);    
   }
 };
