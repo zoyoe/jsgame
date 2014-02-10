@@ -10,16 +10,16 @@ game.path = {};
 game.obstcal = {};
 game.actor = {};
 game.actortype = {};
-game.path.NORMAL_IMG = "res/path/normal.png";
+game.path.NORMAL_IMG = "/static/example/res/path/normal.png";
 game.path.NORMAL_CENTER = {top:0,left:0};
-game.obstcal.TREE_IMG = "res/obstcals/tree.png";
-game.obstcal.TREECUT_IMG = "res/obstcals/treecut.png";
-game.actor.MAIN_IMG = "res/actors/main.png";
-game.actor.MONSTER_IMG = "res/actors/mob4.png";
-game.actor.DOG_IMG = "res/actors/dog.png";
-game.actor.BONE_IMG = "res/actors/bone.png";
+game.obstcal.TREE_IMG = "/static/example/res/obstcals/tree.png";
+game.obstcal.TREECUT_IMG = "/static/example/res/obstcals/treecut.png";
+game.actor.MAIN_IMG = "/static/example/res/actors/main.png";
+game.actor.MONSTER_IMG = "/static/example/res/actors/mob4.png";
+game.actor.DOG_IMG = "/static/example/res/actors/dog.png";
+game.actor.BONE_IMG = "/static/example/res/actors/bone.png";
 game.actor.BOMB_IMG = function(idx){
-  return "res/actors/bomb/bomb" + idx + ".png";
+  return "/static/example/res/actors/bomb/bomb" + idx + ".png";
 }
 game.actortype.GENERAL_MONSTER = 1;
 game.actortype.GENERAL_MONSTER_CONTAINER = 2;
@@ -29,7 +29,7 @@ game.actortype.GENERAL_BONE = 4;
 game.path.normal = function(dec){
   var decoration = Math.floor(Math.random()*21); 
   if(decoration <= 2) {
-    var ele = $("<div class='block-normal'><img src='res/ground/flower1.png'></image></div>").get(0);
+    var ele = $("<div class='block-normal'><img src='/static/example/res/ground/flower1.png'></image></div>").get(0);
     ele.style.width = n2px(game.BLOCK_SZ);
     ele.style.height = n2px(game.BLOCK_SZ);
     var img = ele.getElementsByTagName("img")[0];
@@ -38,7 +38,7 @@ game.path.normal = function(dec){
     clip.zidxLock(0);
     return clip;
   }else if(decoration <= 4){
-    var ele = $("<div class='block-normal'><img src='res/ground/flower2.png'></image></div>").get(0);
+    var ele = $("<div class='block-normal'><img src='/static/example/res/ground/flower2.png'></image></div>").get(0);
     ele.style.width = n2px(game.BLOCK_SZ);
     ele.style.height = n2px(game.BLOCK_SZ);
     var img = ele.getElementsByTagName("img")[0];
@@ -47,7 +47,7 @@ game.path.normal = function(dec){
     clip.zidxLock(0);
     return clip;
   }else if(decoration == 5){
-    var ele = $("<div class='block-normal'><img src='res/ground/stone.png'></image></div>").get(0);
+    var ele = $("<div class='block-normal'><img src='/static/example/res/ground/stone.png'></image></div>").get(0);
     ele.style.width = n2px(game.BLOCK_SZ);
     ele.style.height = n2px(game.BLOCK_SZ);
     var img = ele.getElementsByTagName("img")[0];

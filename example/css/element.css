@@ -1,0 +1,8 @@
+div.block-normal {
+ overflow:display;
+}
+
+div.block-actor {
+ overflow:hidden;
+}
+

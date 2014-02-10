@@ -135,13 +135,6 @@ div.panel .energy > div {
   float:left;
 } 
 
-div.block-normal {
- overflow:display;
-}
-
-div.block-actor {
- overflow:hidden;
-}
 a{
   color:inherit;
   border:none;
