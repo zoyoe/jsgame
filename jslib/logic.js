@@ -35,12 +35,19 @@ function px2n(px){
   parseInt(px);
 }
 
+
+/* A frame is a snopshot of a clip at certain time 
+
+*/
 zoyoe.game.noopFrame = function(parent,idx){
     var index = idx;
     var clip = parent;
     var iskeyframe = false;
+    var stateinfo = {};
     var clips = {};
     var status = zoyoe.game.RUN;
+
+    /* Check whether a clip is tracked in this Frame */
     this.tracked = function(c){
       if(clips[c.name()]){
         return true;
@@ -85,40 +92,23 @@ zoyoe.game.noopFrame = function(parent,idx){
     this.action = function(cb){
         return;
     }
-    this.render = function(){
+
+    /* if the frame represents a key state then we will deliver the msg to its tracked clips
+     *
+     *
+     */
+    this.checkstate = function(){
         if(iskeyframe){
           for(c in clips){
              var track = clips[c];
-             track.clip.position(clips[c].top,clips[c].left);
              /* Since action might delete him self, so should preform action last */
              track.action();
           }
-        }else{
-        var pk = clip.getPreKey(index);
-        var nk = clip.getNextKey(index);
-        if(pk && nk){
-            var pcs = pk.clips();
-            var ncs = nk.clips();
-            for (var key in pcs){
-              var pc = pcs[key];
-              var nc = ncs[key];
-              if(nc){
-                switch(pc.motion){
-                case zoyoe.game.MOTION.TRANSLATION:
-                  var lambda = (this.getIndex()-pk.getIndex())/(nk.getIndex()-pk.getIndex());
-                  var top = pc.top*(1-lambda) + nc.top*lambda;
-                  var left = pc.left*(1-lambda) + nc.left*lambda;
-                  pc.clip.position(top,left);
-                break;
-                }
-              }
-            }
-          }
         }
-    /* It is not implemented well */
+        /* It is not implemented well */
     };
 };
-zoyoe.game.clip = function (n,ele,top,left){
+zoyoe.game.clip = function (n,ele){
 
   /* ( relative_top , relative_left ) is the coordinates of the top-left point
       of the element of this clip */
@@ -202,27 +192,19 @@ zoyoe.game.clip = function (n,ele,top,left){
       return null;
   };
 
-  /* return the top-left position of this clip */
-  this.position = function(top,left){
-      if((!isNaN(top))&&(!isNaN(left))){
-          relative_top = top;
-          relative_left = left;
-      }
-      return {top:relative_top,left:relative_left};
-  };
   this.render = function(){
-    var top = 0;
-    var left = 0;
-    var p = this;
+    var coordinate = this.coordinate;
     var current = this;
+    var p = current.parent;
     do{
       current = p;
-      top += p.top() - p.centerTop();
-      left += p.left() - p.centerLeft();
+      coordinate = zoyoe.game.computeCoordinate(coordinate,p.coordinate);
       p = p.getParent();
     }while(current != p);
-    element.style.top = n2px(top); 
-    element.style.left = n2px(left); 
+    element.setCoordinate(coordinate);
+    /* element.style.top = n2px(top); 
+       element.style.left = n2px(left);
+    */ 
   };
   this.inc = function(){
       if(stay){
@@ -242,14 +224,12 @@ zoyoe.game.clip = function (n,ele,top,left){
       }
   };
   this.step = function(){
-    var display = element.style.display;
-    element.style.display = "none";
     var frame = frames[idx];
     frame.render(this);
     var keyframe = this.getPreKey(idx);
     for(var c in clips){
       if(keyframe.tracked(clips[c])){
-     clips[c].step();
+      clips[c].step();
         if(clips[c].element().parentNode == element){
           /* don know what to do here */
         }else{
@@ -319,14 +299,23 @@ zoyoe.game.clip = function (n,ele,top,left){
   }
 }
 
-zoyoe.game.clipprox = function(clip){
+/* When a clip shows up in a frame, a clipprox will be created. 
+ * The position of the clipprox is 
+ *  
+ */
+zoyoe.game.clipprox = function(clip,coordinate){
     this.clip = clip;
-    this.top = clip.top();
-    this.left = clip.left();
+    this.coordinate = coordinate;
     this.motion = zoyoe.game.MOTION.NULL;
     this.action = function(){
       return;
     }
+    /* return the top-left position of this clipprox */
+    this.position = function(coordinate){
+      this.coordinate = coordinate;
+      return coordinate;
+    };
+
 }
 
 zoyoe.game.newName = function(){
