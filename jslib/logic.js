@@ -89,7 +89,10 @@ zoyoe.game.noopFrame = function(parent,idx){
     this.clips = function(){
         return clips;
     }
-    this.action = function(cb){
+
+    /* After all the elements in this frame reacts, all the events will pended in the event queue
+    */
+    this.react= function(cb){
         return;
     }
 
@@ -191,21 +194,6 @@ zoyoe.game.clip = function (n,ele){
       };
       return null;
   };
-
-  this.render = function(){
-    var coordinate = this.coordinate;
-    var current = this;
-    var p = current.parent;
-    do{
-      current = p;
-      coordinate = zoyoe.game.computeCoordinate(coordinate,p.coordinate);
-      p = p.getParent();
-    }while(current != p);
-    element.setCoordinate(coordinate);
-    /* element.style.top = n2px(top); 
-       element.style.left = n2px(left);
-    */ 
-  };
   this.inc = function(){
       if(stay){
         stay = false;
@@ -216,40 +204,20 @@ zoyoe.game.clip = function (n,ele){
           idx = 0;
       }
   };
-  this.setCallBack = function(frame_idx,callback){
-      if(frame_idx<frames.length){
-          throw "frame idx overflow";
-      }else{
-          this.frames[frame_idx.callbac = callback];
-      }
-  };
   this.step = function(){
     var frame = frames[idx];
-    frame.render(this);
+    frame.checkstate(this);
     var keyframe = this.getPreKey(idx);
     for(var c in clips){
       if(keyframe.tracked(clips[c])){
-      clips[c].step();
-        if(clips[c].element().parentNode == element){
-          /* don know what to do here */
-        }else{
-          element.appendChild(clips[c].element());
-        } 
-      }else{
-        try {
-          element.removeChild(clips[c].element());
-        }catch(exception) {
-          /* pass silently here */
-        }
+        clips[c].step();
       }
     }
-    frame.action();
-    this.render();
+    frame.react();
     if(status == zoyoe.game.RUN){
       this.inc();
     }else{
     }
-    element.style.display = display;
   };
   this.play = function(){
     status = zoyoe.game.RUN;
